@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Visualization</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+      color: #ffffff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .header {
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #a855f7;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      background: rgba(168, 85, 247, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+      background: rgba(168, 85, 247, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(168, 85, 247, 0.3);
+    }
+
+    .section-title {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #a1a1aa;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .projects-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .project-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(168, 85, 247, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #a855f7, #ec4899);
+      border-radius: 20px 20px 0 0;
+    }
+
+    .project-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(168, 85, 247, 0.2);
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    .project-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-number {
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .project-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .project-description {
+      color: #d4d4d8;
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+
+    .project_graph {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .tech-tag {
+      background: rgba(168, 85, 247, 0.1);
+      color: #a855f7;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+    }
+
+    .project-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: auto;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      color: white;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(168, 85, 247, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #a1a1aa;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    @media (max-width: 768px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .container {
+        padding: 1rem;
+      }
+    }
+
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .floating-element {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(168, 85, 247, 0.1);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* Toggle Styles */
+    .project-toggles {
+      margin-top: 1.5rem;
+    }
+
+    .toggle-section {
+      margin-bottom: 1rem;
+    }
+
+    .toggle-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-btn:hover {
+      background: rgba(168, 85, 247, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
+    }
+
+    .toggle-icon {
+      font-size: 1.2rem;
+    }
+
+    .toggle-text {
+      flex: 1;
+      text-align: left;
+    }
+
+    .toggle-arrow {
+      font-size: 0.8rem;
+      transition: transform 0.3s ease;
+    }
+
+    .toggle-btn.active .toggle-arrow {
+      transform: rotate(180deg);
+    }
+
+    .toggle-content {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 1.5rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-left: 1px solid rgba(168, 85, 247, 0.2);
+      border-right: 1px solid rgba(168, 85, 247, 0.2);
+      border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 0 0 12px 12px;
+      transition: all 0.4s ease;
+      margin-top: -1px;
+    }
+
+    .toggle-content.active {
+        max-height: none;
+        padding: 1.5rem;
+    }
+
+    .toggle-content p {
+      color: #d4d4d8;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #a855f7;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      background: rgba(168, 85, 247, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .github-link:hover {
+      background: rgba(168, 85, 247, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+    }
+
+    .github-icon {
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-elements">
+    <div class="floating-element" style="width: 60px; height: 60px; top: 20%; left: 10%; animation-delay: 0s;"></div>
+    <div class="floating-element" style="width: 40px; height: 40px; top: 60%; right: 10%; animation-delay: 2s;"></div>
+    <div class="floating-element" style="width: 80px; height: 80px; top: 80%; left: 60%; animation-delay: 4s;"></div>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <a href="index.html#projects" class="back-link">
+        ← Back to Portfolio
+      </a>
+      <h1 class="section-title">Data Visualizations</h1>
+      <p class="subtitle">Turning data into meaningful insights through effective visualization and storytelling.</p>
+    </div>
+
+
+<!-- Project 1 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-number">1</div>
+          <h3 class="project-title">Global Data Professionals Survey Analysis Dashboard</h3>
+        </div>
+        
+        <p class="project-description"> An interactive Power BI dashboard analyzing salary trends, job satisfaction, career progression, learning opportunities, and technology usage among data professionals across multiple countries.
+
+
+        </p>
+
+        <div class="tech-stack">
+          <span class="tech-tag">Power BI</span> 
+          <span class="tech-tag">Data Visualization</span> 
+          <span class="tech-tag">Survey Analysis</span> 
+          <span class="tech-tag">Dashboard Design</span> 
+        </div>
+
+        <div class="project-toggles">
+          <div class="toggle-section">
+            <button class="toggle-btn" onclick="toggleSection(this)">
+              <span class="toggle-icon">⚙️</span>
+              <span class="toggle-text">Business Impact</span>
+              <span class="toggle-arrow">▼</span>
+            </button>
+            <div class="toggle-content">
+            <p> <h1>+ Global Data Professionals Survey Analysis Dashboard +</h1>
+                <h2>Overview</h2>
+                <p>
+                
+                <p> The demand for data professionals has grown significantly over the last decade, creating new career opportunities across industries worldwide. However, questions remain regarding salary expectations, job satisfaction, preferred technologies, and career development opportunities within the field. </p>
+                
+                <p> This project analyzes survey responses collected from data professionals across multiple countries. The objective was to transform raw survey data into an interactive Power BI dashboard capable of providing insights into compensation, job satisfaction, learning opportunities, and technology adoption within the data industry. </p>
+
+                <h2>Data Preparation</h2>
+
+                <ul style="margin-left: 2rem;"></ul>
+                    <li>Cleaned survey responses and standardized categorical variables.</li> 
+                    <li>Handled incomplete and inconsistent responses.</li>
+                    <<li>Prepared demographic and geographic dimensions for analysis.</li>
+                    <li>Developed interactive filters and drill-down functionality.</li>
+                </ul>
+                </p>
+
+                <h2>Key Analysis Questions</h2> 
+                <p>
+                <ul style="margin-left: 2rem;"> 
+                  <li>How do salaries differ across data-related professions?</li>
+
+    
+                  <li>Which tools are most commonly used by data professionals?</li>
+
+                  <li>How satisfied are professionals with their careers?</li>
+
+                  <li>Which countries offer the strongest compensation opportunities?</li>
+
+                  <li>What learning and career development opportunities exist across roles?</li>
+                </ul>
+                </p>
+
+                <h2>Analysis Insights from EDA</h2>
+
+                <p>
+                <ul style="margin-left: 2rem;"></ul>
+                <li>Dashboard Overview</li>
+                </ul>
+                <img class="project_graph" src="images/dash1.png" alt="Dashboard Overview">
+                </p>
+
+                <p>
+                <ul style="margin-left: 2rem;"></ul>
+                <li>Dashboard 2</li>
+                </ul>
+                <img class="project_graph" src="images/dash2.png" alt="Dashboard">
+                </p>
+
+                <p>
+                <h2>Dashboard Insights</h2>
+                <ul style="margin-left: 2rem;">
+                  
+  
+                  <li>Data Scientists and Data Engineers generally reported higher salary levels than many other data-related roles.</li>
+
+                  <li>Python, SQL, and Power BI emerged as some of the most widely used tools across respondents.</li>
+
+                  <li>Job satisfaction varied considerably between roles and regions.</li>
+
+                  <li>Professionals with stronger learning opportunities tended to report higher overall career satisfaction.</li>
+
+                  <li>Significant salary differences were observed across countries, reflecting varying market maturity and demand for data skills.</li>
+
+                </ul><br><br>
+                <h2>Conclusion</h2> 
+                
+                <p> The dashboard demonstrates how workforce survey data can be transformed into actionable insights for employers, job seekers, educators, and industry stakeholders. Through interactive visualizations and KPI tracking, the project provides a comprehensive view of compensation trends, job satisfaction, technology adoption, and career development within the global data profession. </p>
+            </div>
+          </div>
+          
+          <div class="toggle-section">
+            <button class="toggle-btn" onclick="toggleSection(this)">
+              <span class="toggle-icon">⚙️</span>
+              <span class="toggle-text">Technical Details</span>
+              <span class="toggle-arrow">▼</span>
+            </button>
+            <div class="toggle-content">
+              <p>
+                The dashboard includes salary analysis, job satisfaction metrics, tool adoption trends, geographic comparisons, and career development insights using calculated measures, KPIs, slicers, and drill-through functionality.
+              </p>
+
+            <p>
+                The final dashboard enables stakeholders to explore workforce trends dynamically and gain deeper insights into the evolving data profession.
+            </p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    
+
+    <!-- Project 2 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-number">2</div>
+          <h3 class="project-title">Electric Vehicle Adoption Analysis</h3>
+        </div>
+        
+        <p class="project-description"> An exploratory analysis of global video game sales data to identify the genres, platforms, publishers, and regional markets that have historically driven the industry's commercial success. 
+
+        </p>
+
+        <div class="tech-stack">
+          <span class="tech-tag">Python</span> 
+          <span class="tech-tag">Pandas</span> 
+          <span class="tech-tag">Matplotlib</span> 
+          <span class="tech-tag">Seaborn</span> 
+          <span class="tech-tag">EDA</span>
+        </div>
+
+        <div class="project-toggles">
+          <div class="toggle-section">
+            <button class="toggle-btn" onclick="toggleSection(this)">
+              <span class="toggle-icon">⚙️</span>
+              <span class="toggle-text">Business Impact</span>
+              <span class="toggle-arrow">▼</span>
+            </button>
+            <div class="toggle-content">
+            <p> <h1>+ Electric Vehicle Adoption Analysis +</h1>
+                <h2>Overview</h2>
+                <p>
+                
+                <p> Governments and automotive manufacturers worldwide are investing billions of dollars in the transition to electric vehicles (EVs). Despite this rapid growth, EV adoption rates vary significantly between countries, raising important questions about which economic, policy, and infrastructure factors truly drive consumer adoption. </p>
+                
+                <p> This project investigates the key determinants of electric vehicle adoption across multiple countries over time using panel data analysis. The objective was to identify which factors have the strongest influence on EV market share and provide evidence-based recommendations for policymakers, investors, and automotive manufacturers. </p>
+
+                <h2>Data Preparation</h2>
+        
+                <p> Prior to analysis, extensive preprocessing was conducted to ensure the reliability of the results: </p>
+                <p>
+                <ul style="margin-left: 2rem;"></ul>
+                    <li>Integrated EV adoption, economic, demographic, and infrastructure datasets.</li> 
+                    <li>Handled missing values and inconsistent country records.</li> 
+                    <li>Standardized variables across countries and years.</li> <li>Evaluated multicollinearity using Variance Inflation Factors (VIF).</li> 
+                    <li>Prepared panel data structures for econometric modeling.</li> 
+                    <li>Scaled and transformed variables where appropriate.</li>
+                </ul>
+                </p>
+
+                <h2>Key Analysis Questions</h2> 
+                <p>
+                <ul style="margin-left: 2rem;"> 
+                  <li>What factors most strongly influence EV adoption across countries?</li> 
+                  <li>How important is charging infrastructure in accelerating adoption?</li> 
+                  <li>Do wealthier countries adopt EVs more rapidly?</li> 
+                  <li>How effective are policy and regulatory initiatives in increasing market share?</li> 
+                  <li>Which factors remain significant after controlling for country-specific characteristics?</li>
+                </ul>
+                </p>
+
+                <h2>Analysis Insights from EDA</h2>
+
+                <p>
+                <ul style="margin-left: 2rem;"></ul>
+                <li>EV Share over Time</li>
+                </ul>
+                <img class="project_graph" src="https://raw.githubusercontent.com/delphi168/Investigating-the-Drivers-of-EV-Adoption-Using-Panel-Data-Econometrics-2010-2024-/main/Figures/EV_share_over_Time.png" alt="EV Share over Time">
+                </p>
+
+                <p>
+                <ul style="margin-left: 2rem;"></ul>
+                <li>EV Share Vs log GDP per Capita</li>
+                </ul>
+                <img class="project_graph" src="https://raw.githubusercontent.com/delphi168/Investigating-the-Drivers-of-EV-Adoption-Using-Panel-Data-Econometrics-2010-2024-/main/Figures/EV_share_VS_log_GDP_per_Capita.png" alt="EV Share Vs log GDP per Capita">
+                </p>
+
+                <p>
+                <ul style="margin-left: 2rem;"></ul>
+                <li>EV Share Vs Consumer Awareness</li>
+                </ul>
+                <img class="project_graph" src="https://raw.githubusercontent.com/delphi168/Investigating-the-Drivers-of-EV-Adoption-Using-Panel-Data-Econometrics-2010-2024-/main/Figures/Consumer_Awearness_Vs_EV_share.png" alt="EV Share Vs Consumer Awareness">
+                </p>
+
+                <p>
+                <h2>Business Recommendations</h2>
+                <ul style="margin-left: 2rem;">
+                  
+
+                <p>    
+                <li>Governments seeking to accelerate EV adoption should prioritize investment in public charging infrastructure.</li> 
+                <li>Automotive manufacturers should focus expansion efforts on regions with strong infrastructure growth and rising income levels.</li> 
+                <li>Policy incentives should be paired with infrastructure development rather than implemented in isolation.</li> 
+                <li>Investors evaluating EV-related opportunities should monitor infrastructure deployment trends alongside vehicle sales data.</li> <li>Future EV adoption forecasts should incorporate country-specific characteristics rather than relying solely on global averages.</li>
+                </ul><br><br>
+                <h2>Conclusion</h2> 
+                
+                <p> The analysis found that consumer awareness and charging infrastructure were the most important drivers of EV adoption across countries. Google Trends search activity emerged as the strongest predictor of EV market share, suggesting that public interest and awareness play a critical role in accelerating adoption. Charging infrastructure also had a significant positive impact, reinforcing the importance of network availability and convenience for consumers. In contrast, variables often assumed to influence EV adoption—including GDP growth, gasoline prices, and residential electricity prices—did not remain statistically significant after controlling for country-specific and time-specific effects. These findings highlight that increasing consumer awareness and expanding charging infrastructure may be more effective strategies for accelerating EV adoption than relying on broader economic growth or energy price changes alone. </p>
+            </div>
+          </div>
+          
+          <div class="toggle-section">
+            <button class="toggle-btn" onclick="toggleSection(this)">
+              <span class="toggle-icon">⚙️</span>
+              <span class="toggle-text">Technical Details</span>
+              <span class="toggle-arrow">▼</span>
+            </button>
+            <div class="toggle-content">
+              <p>This project involved data cleaning, exploratory data analysis, panel data preparation, multicollinearity testing, model selection, and econometric analysis using Two-Way Fixed Effects Panel Regression.
+
+                <p> Statistical techniques including VIF analysis, model diagnostics, hypothesis testing, and panel regression were used to identify the factors that significantly influence EV market share across countries over time. 
+
+                </p>
+                
+                <p>
+                    The complete workflow, including code, visualizations, and findings, is documented in the accompanying Jupyter Notebook.
+                </p>
+                
+                <p>
+                    <a href="https://github.com/delphi168/Investigating-the-Drivers-of-EV-Adoption-Using-Panel-Data-Econometrics-2010-2024-" class="github-link" target="_blank">
+                    <span class="github-icon">⭐</span>
+                    View on GitHub
+                    </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    
+
+    
+
+
+      <!-- Project 3 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-number">3</div>
+          <h3 class="project-title">British Airways Customer Booking Prediction</h3>
+        </div>
+        
+        <p class="project-description"> This project analyzes customer booking behavior for British Airways to identify the factors that influence booking completion and to develop predictive models capable of estimating the likelihood that a customer will finalize a booking.
+
+        </p>
+
+        <div class="tech-stack">
+          <span class="tech-tag">Python</span> 
+          <span class="tech-tag">Pandas</span> 
+          <span class="tech-tag">Matplotlib</span> 
+          <span class="tech-tag">Seaborn</span> 
+          <span class="tech-tag">EDA</span>
+        </div>
+
+        <div class="project-toggles">
+          <div class="toggle-section">
+            <button class="toggle-btn" onclick="toggleSection(this)">
+              <span class="toggle-icon">⚙️</span>
+              <span class="toggle-text">Business Impact</span>
+              <span class="toggle-arrow">▼</span>
+            </button>
+            <div class="toggle-content">
+            <p> <h1>+ British Airways Customer Booking Prediction +</h1>
+                <h2>Overview</h2>
+                <p>
+                
+                <p> Airlines invest heavily in marketing campaigns to attract potential customers to their booking platforms. However, not every visitor who begins the booking process ultimately completes a reservation. </p>
+                
+                <p> The analysis combines exploratory data analysis, statistical testing, customer segmentation, and machine learning techniques to uncover actionable insights that can improve conversion rates and support more efficient marketing strategies. </p>
+
+                <h2>Data Preparation</h2>
+        
+                <p> Several preprocessing steps were performed before analysis: </p>
+                <p>
+                <ul style="margin-left: 2rem;"></ul>
+                    <li>Missing value assessment</li> 
+                    <li>Duplicate record validation.</li> 
+                    <li>Categorical variable encoding</li> 
+                    <li>Evaluated multicollinearity using Variance Inflation Factors (VIF).</li> 
+                    <li>Data normalization where appropriate</li> 
+                </ul>
+                </p>
+
+                <h2>Key Analysis Questions</h2> 
+                <p>
+                <ul style="margin-left: 2rem;"> 
+                  <li>Which customer characteristics influence booking completion?</li> 
+                  <li>Which markets generate the highest conversion rates?</li> 
+                  <li>How does booking lead time affect customer behavior?</li> 
+                  <li>Can customer behavior be used to predict booking completion?</li> 
+                  <li>How can marketing resources be allocated more efficiently?</li>
+                </ul>
+                </p>
+
+                <h2>Analysis Insights from EDA</h2>
+
+                <p>
+                <ul style="margin-left: 2rem;"></ul>
+                <li>Booking Completion</li>
+                </ul>
+                <img class="project_graph" src="https://raw.githubusercontent.com/delphi168/British-Airways-Customer-Booking-Analysis-/main/images/booking_completion.png" alt="Booking Completion">
+                </p>
+
+                <p>
+                <ul style="margin-left: 2rem;"></ul>
+                <li>Booking Completion Vs Flight Duration</li>
+                </ul>
+                <img class="project_graph" src="https://raw.githubusercontent.com/delphi168/British-Airways-Customer-Booking-Analysis-/main/images/bc_vs_fd.png" alt="Booking Completion Vs Flight Duration">
+                </p>
+
+                <p>
+                <ul style="margin-left: 2rem;"></ul>
+                <li>Booking Completion Vs Purchase Lead</li>
+                </ul>
+                <img class="project_graph" src="https://raw.githubusercontent.com/delphi168/British-Airways-Customer-Booking-Analysis-/main/images/bc_vs_pl.png" alt="Booking Completion Vs Purchase Lead">
+                </p>
+
+                <p>
+                <ul style="margin-left: 2rem;"></ul>
+                <li>Booking Completion Vs Origin Region</li>
+                </ul>
+                <img class="project_graph" src="https://raw.githubusercontent.com/delphi168/British-Airways-Customer-Booking-Analysis-/main/images/bc_vs_or.png" alt="Booking Completion Vs Origin Region">
+                </p>
+
+                <p>
+                <ul style="margin-left: 2rem;"></ul>
+                <li>Booking Completion Vs Wants Preferred seat</li>
+                </ul>
+                <img class="project_graph" src="https://raw.githubusercontent.com/delphi168/British-Airways-Customer-Booking-Analysis-/main/images/bc_vs_wps.png" alt="Booking Completion Vs Wants Preferred seat">
+                </p>
+            </div>
+          </div>
+          
+          <div class="toggle-section">
+            <button class="toggle-btn" onclick="toggleSection(this)">
+              <span class="toggle-icon">⚙️</span>
+              <span class="toggle-text">Technical Details</span>
+              <span class="toggle-arrow">▼</span>
+            </button>
+            <div class="toggle-content">
+              <p>This project involved data cleaning, exploratory data analysis, customer segmentation, and predictive modeling using Python.
+                <p>
+                    The complete workflow, including code, visualizations, and findings, is documented in the accompanying Jupyter Notebook.
+                </p>
+                
+                <p>
+                    <a href="https://github.com/delphi168/British-Airways-Customer-Booking-Analysis-" class="github-link" target="_blank">
+                    <span class="github-icon">⭐</span>
+                    View on GitHub
+                    </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+  <script>
+  function toggleSection(button) {
+    const content = button.nextElementSibling;
+    const isActive = content.classList.contains('active');
+
+    // Close all other toggles in the same project card
+    const projectCard = button.closest('.project-card');
+    const allToggleContents = projectCard.querySelectorAll('.toggle-content');
+    const allToggleButtons = projectCard.querySelectorAll('.toggle-btn');
+
+    allToggleContents.forEach(tc => tc.classList.remove('active'));
+    allToggleButtons.forEach(tb => tb.classList.remove('active'));
+
+    // Toggle the clicked section
+    if (!isActive) {
+      content.classList.add('active');
+      button.classList.add('active');
+
+      // Delay the scroll a little to allow content to expand
+      setTimeout(() => {
+        const yOffset = -100; // Adjust this if you have a sticky navbar
+        const y = button.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }, 200); // delay helps ensure content has rendered
+    }
+  }
+
+  // Add stagger animation to project cards
+  document.addEventListener('DOMContentLoaded', function () {
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach((card, index) => {
+      card.style.animationDelay = `${index * 0.1}s`;
+      card.style.animation = 'fadeInUp 0.6s ease forwards';
+    });
+  });
+
+  // Fade-in CSS
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .project-card {
+      opacity: 0;
+    }
+  `;
+  document.head.appendChild(style);
+</script>
